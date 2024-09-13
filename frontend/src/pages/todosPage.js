@@ -38,7 +38,6 @@ export const todosPage = () => {
     "w-1/2",
     "bg-white",
     "shadow-md",
-    "h-[700px]",
     "overflow-y-scroll"
   );
 
@@ -79,7 +78,6 @@ export const todosPage = () => {
     .then((response) => response.json())
     .then((data) => {
       data.todos.forEach((todo) => {
-        if (todo.id > 10) return;
 
         const tr = document.createElement("tr");
 
