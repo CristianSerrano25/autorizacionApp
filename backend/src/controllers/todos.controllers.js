@@ -17,29 +17,33 @@ export const createTodoCtrl = (req, res) => {
   res.status(201).json(newTodo);
 };
 
-export const getTodoCtrl = (req, res) => {
-  const todo = database.todos.find((todo) => todo.id === req.params.id);
-  if (!todo) {
-    return res.status(404).json({ error: "Todo not found" });
+export const getTodoByIdCtrl = (req, res) => {
+  const todo = database.todos.find((todo) => todo.id === parseInt(req.params.id));
+  if (todo) {
+    res.json(todo);
+  } else {
+    res.status(404).json({ message: "Todo not found" });
   }
-  res.json(todo);
-};
+}
 
 export const updateTodoCtrl = (req, res) => {
-  const todo = database.todos.find((todo) => todo.id === req.params.id);
-  if (!todo) {
-    return res.status(404).json({ error: "Todo not found" });
+  const todo = database.todos.find((todo) => todo.id === parseInt(req.params.id));
+  if (todo) {
+    const { title, completed } = req.body;
+    todo.title = title;
+    todo.completed = completed;
+    res.json(todo);
+  } else {
+    res.status(404).json({ message: "Todo not found" });
   }
-  todo.title = req.body.title;
-  todo.completed = req.body.completed;
-  res.json(todo);
-};
+}
 
 export const deleteTodoCtrl = (req, res) => {
-  const index = database.todos.findIndex((todo) => todo.id === req.params.id);
-  if (index === -1) {
-    return res.status(404).json({ error: "Todo not found" });
+  const index = database.todos.findIndex((todo) => todo.id === parseInt(req.params.id));
+  if (index !== -1) {
+    database.todos.splice(index, 1);
+    res.json({ message: "Todo deleted" });
+  } else {
+    res.status(404).json({ message: "Todo not found" });
   }
-  database.todos.splice(index, 1);
-  res.status(204).end();
-}
+} 
